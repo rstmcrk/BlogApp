@@ -1,10 +1,12 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApp.Controllers
 {
+    [AllowAnonymous]
     public class NewsLatterController : Controller
     {
         NewsLatterManager nm = new NewsLatterManager(new EfNewsLatterRepository());
@@ -15,11 +17,11 @@ namespace BlogApp.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult SubscribeMail(NewsLatter p)
+        public IActionResult SubscribeMail(NewsLatter p)
         {
             p.MailStatus = true;
             nm.AddNewsLatter(p);
-            return PartialView();
+            return RedirectToAction("Index", "Blog");
         }
     }
 }
